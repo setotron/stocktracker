@@ -1,0 +1,199 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>StockTracker</title>
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link th:href="@{/bootstrap/css/jumbotron.css}" rel="stylesheet">
+    <link th:href="@{/bootstrap/css/sticky-footer-navbar.css}" rel="stylesheet">
+    <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" >
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+
+    <style>
+      .fondo-bg{
+        background-image: url(/images/fondo-bg.png);
+        font-family: 'Lato';
+      }
+    </style>
+  </head>
+
+  <body class="fondo-bg">
+    <header th:insert="fragments/menu :: menu-principal"></header>
+    <main role="main" class="py-5">
+      <hr>
+      <div class="container"> 
+
+        <div class="card bg-secondary text-light">
+          <h4 class="card-header"><strong>Datos del Producto</strong></h4>
+          <div class="card-body">
+            <form th:action="@{/productos/save}" method="post" th:object="${productos}"  enctype="multipart/form-data">
+             
+              <div th:if="${#fields.hasErrors('*')}"class='alert alert-danger' role='alert'>
+				Por favor corrija los siguientes errores:
+				<ul>
+				<li th:each="err : ${#fields.errors('*')}" th:text="${err}"/>
+				</ul>
+			  </div>
+
+
+              <div class="row">
+
+                <div class="col-md-7">
+
+                    <div class="form-group">
+                      <label for="nombre">Nombre</label>
+                      <input type="hidden" class="form-control" th:field="*{id}" id="nº prod" name="num prod" >
+                      <input type="hidden" th:field="*{imagen}" >
+                      <input type="text" class="form-control" th:field="*{nombre}" id="nombre" name="nombre" placeholder="Nombre Producto" required="required">
+                    </div>
+
+
+                  <label for="color">Color</label>
+                  <select class="form-control" th:field="*{color}" name="color" id="color">
+                    <option value="Marrón">Marrón</option>
+                    <option value="Rojo">Rojo</option>
+                    <option value="Verde">Verde</option>
+                    <option value="Azul">Azul</option>
+                    <option value="Amarillo">Amarillo</option>
+
+                  </select>
+                </div>
+              </div>
+
+              <hr>
+
+              <div class="row">
+
+                <div class="col-md-3">
+                  <label for="tipo">Tipo</label>
+                  <select class="form-control" th:field="*{tipo}" name="tipo" id="tipo">
+                    <option value="Sofás">Sofás</option>
+                    <option value="Mesas">Mesas</option>
+                    <option value="Sillas">Sillas</option>
+                    <option value="Camas">Camas</option>
+                    <option value="Escritorios">Escritorios</option>
+                    <option value="Cómodas">Cómodas</option>
+                    <option value="Mesas de comedor">Mesas de comedor</option>
+                    <option value="Mueble Televisor">Mueble Televisor</option>
+                    <option value="Estanterias">Estanterias</option>
+                    <option value="Literas">Literas</option>
+                    <option value="Mesitas de cafe">Mesitas de cafe</option>
+                    <option value="Taburetes">Taburetes</option>
+                  </select>
+
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="nSerie">Número de Serie</label>
+                    <input type="text" pattern="[a-zA-Z0-9-]{8}" title="debe incluir ocho letras y números en total." class="form-control" th:field="*{nSerie}" name="numero de serie" id="nserie" placeholder="Número de Serie" required="required">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="nSerie">Codigo de Referencia</label>
+                    <input type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="4" class="form-control" th:field="*{codigo}" name="Codigo de referencia" id="Code" placeholder="Ej: 1234" required="required">
+                  </div>
+                </div>
+
+                <div class="col-md-3"> 
+                  <div class="form-group">
+                    <label for="fechaEntrada">Fecha de Entrada</label>
+                    <input type="text" class="form-control" th:field="*{fechaEntrada}" name="fecha de entrada" id="fechaEntrada" placeholder="Fecha de Entrada" required="required">
+                  </div>  
+                </div>
+
+                <div class="col-md-5">
+                  <div class="form-group">
+                    <label for="archivoImagen">Imagen</label>
+                    <input type="file" class="form-control-file" name="archivoImagen" id="archivoImagen">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <label for="imagen">Imagen Producto</label>
+                  <img class="rounded mx-auto d-block" th:src="@{/productos/{img} (img=${productos.imagen}) }" alt="Carga de Imagen" width="200" height="200" id="imagen">
+                </div>
+
+                <div class="col-md-9">
+                  <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <input type="text" class="form-control" th:field="*{descripcion}" id="descripcion" name="descripcion" placeholder="Breve descripcion de la oferta de trabajo">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="cantid">Unidades</label>
+                    <input type="number" class="form-control" th:field="*{unidades}" name="cantid" id="cantid" placeholder="Unidades" required="required">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="ubi">Ubicación</label>
+                    <input type="text" class="form-control" th:field="*{ubicacion}" name="ubi" id="ubi" placeholder="Localizacion del producto" required="required">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="preci">Precio</label>
+                    <input type="number" class="form-control" th:field="*{precio}" name="preci" id="preci" placeholder="Precio del producto" required="required">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="marc">Marca</label>
+                    <input type="text" class="form-control" th:field="*{marca}" name="marc" id="marc" placeholder="Marca del producto">
+                  </div>
+                </div>
+
+
+              </div>    
+
+              <hr>
+
+                              <button type="submit" class="btn btn-primary">Guardar</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div> <!-- /container -->
+
+    </main>
+
+    <footer th:insert="fragments/footer :: pie-pagina" class="footer"></footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> 
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>     
+    <script th:src="@{/tinymce/tinymce.min.js}"></script>
+    <script>
+      
+      $(function () {
+          $("#fechaEntrada").datepicker({dateFormat: 'dd-mm-yy'});
+        }
+      );
+
+      tinymce.init({
+          selector: '#detalles',
+          plugins: "textcolor, table lists code",
+          toolbar: " undo redo | bold italic | alignleft aligncenter alignright alignjustify \n\
+                    | bullist numlist outdent indent | forecolor backcolor table code"
+      });
+      
+    </script>
+  </body>
+</html>

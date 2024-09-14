@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<title>StockTracker</title>
+<!-- Bootstrap core CSS -->
+<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link th:href="@{/bootstrap/css/jumbotron.css}" rel="stylesheet">
+<link th:href="@{/bootstrap/css/sticky-footer-navbar.css}" rel="stylesheet">
+<link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+
+
+<style>
+    .fondo-bg{
+        background-image: url(/images/fondo-bg.png);
+        font-family: 'Lato';
+    }
+
+    .pa-pers{
+        position: absolute;
+        left: 15px;
+    }
+</style>
+
+<body class="fondo-bg">
+<header th:insert="fragments/menu :: menu-principal"></header>
+
+<main role="main" class="py-5">
+    <div class="col-12">
+        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+             th:text="${mensaje}"
+             class="alert">
+        </div>
+        <!--<a class="btn btn-success mb-2" th:href="@{/vender/}">Agregar</a>-->
+        <div class="d-flex justify-content-end p-3 bg-dark text-light rounded">
+            <h2 class="pa-pers " style="margin-left:15px">Pedidos</h2>
+            <form class="form-inline" th:action="@{/ventas/index}">
+                <div class="row">
+                    <div class="form-group">
+                        <label>Filtrar: </label>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <input type="text" class="form-control" name="filtro" id="filtro" th:value="${filtro}" placeholder="Introduce ID o Cliente" required>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="submit" class="btn btn-primary" value="Buscar">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="button" class="btn btn-danger" value="Limpiar" onclick="limpiarFiltro()">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="mt-2 table-responsive text-light">
+            <table class="table table-bordered table-dark table-hover table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Cliente Enviado</th>
+                    <th>Dirección</th>
+                    <th>Productos</th>
+
+                </tr>
+                </thead>
+                <tbody class="bg-dark text-light">
+                <tr th:each="venta : ${ventas}">
+                    <td th:text="${venta.id}"></td>
+                    <td th:text="${venta.fecha}"></td>
+                    <td th:text="${venta.total}"></td>
+                    <td th:text="${venta.cliente.getEmpresa()}"></td>
+                    <td th:text="${venta.cliente.getDireccion()}"></td>
+                    <td>
+                        <table class="table table-bordered table-dark table-hover table-striped">
+                            <thead class="thead-dark">
+                            <tr>
+
+                                <th>Nombre</th>
+                                <th>Código de barras</th>
+                                <th>Cantidad vendida</th>
+                                <th>Precio</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody class="bg-dark text-light">
+                            <tr th:each="producto : ${venta.PedidosPro}">
+                                <td th:text="${producto.nombre}"></td>
+                                <td th:text="${producto.codigo}"></td>
+                                <td th:text="${producto.cantidad}"></td>
+                                <td th:text="${producto.precio}"></td>
+                                <td th:text="${producto.total}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<script type="text/javascript">
+    function limpiarFiltro(){
+        window.location = '/ventas/index';
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="favicon.ico">
+
+  <title>StockTracker</title>
+  <!-- Bootstrap core CSS -->
+  <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link th:href="@{/bootstrap/css/jumbotron.css}" rel="stylesheet">
+  <link th:href="@{/bootstrap/css/sticky-footer-navbar.css}" rel="stylesheet">
+  <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+  <style>
+    /* Estilos personalizados */
+    @media screen and (max-width: 768px) {
+      .ml-lg-3 {
+        margin-left: 0 !important;
+      }
+    }
+    .fondo-bg{
+      background-image: url(/images/fondo-bg.png);
+      font-family: 'Lato', sans-serif;
+    }
+  </style>
+</head>
+
+<body class="fondo-bg">
+
+<header th:insert="fragments/menu :: menu-principal"></header>
+
+<main role="main" class="py-5">
+  <hr>
+  <div class="container mt-5">
+
+    <div class="card bg-secondary text-light">
+      <h4 class="card-header"><strong>Productos</strong></h4>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <a class="btn btn-primary mb-3" th:href="@{/productos/create}" title="Añadir producto" role="button"><i class="fas fa-file" aria-hidden="true"></i> Nuevo Producto</a>
+          </div>
+          <div class="col-md-6">
+            <form class="form-inline" th:action="@{/productos/indexPaginate}">
+              <div class="row">
+                <div class="form-group">
+                  <label>Filtrar: </label>
+                </div>
+                <div class="col-md-6 form-group">
+                  <input type="text" class="form-control" name="filtro" id="filtro" th:value="${filtro}" placeholder="Introduce valor a filtrar" required>
+                </div>
+                <div class="col-md-2">
+                  <input type="submit" class="btn btn-primary" value="Buscar">
+                </div>
+                <div class="col-md-2">
+                  <input type="button" class="btn btn-danger" value="Limpiar" onclick="limpiarFiltro()">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <hr>
+        <div th:if="${msg != null}" class='alert alert-success' th:text="${msg}" role='alert'></div>
+        <div class="table-responsive">
+          <table class="table table-dark table-hover table-striped">
+            <thead class="thead-dark">
+            <tr>
+              <th scope="col">ID Prod</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Nº de Referencia</th>
+              <th scope="col">Nº Serie</th>
+              <th scope="col">Descripcion</th>
+              <th scope="col">Fecha Entr</th>
+              <th scope="col">Usuario</th>
+              <th scope="col">Unidades</th>
+
+              <th scope="col">Precio</th>
+
+
+
+            </tr>
+            </thead>
+            <tbody class="bg-dark text-light">
+            <tr th:each="prod : ${productos}">
+
+              <td th:text="${prod.getId()}"></td>
+              <td th:text="${prod.getNombre()}"></td>
+              <td th:text="${prod.codigo}"></td>
+
+
+              <td th:text="${prod.getnSerie}"></td>
+              <td th:text="${prod.descripcion}"></td>
+
+              <td th:text="${prod.getFechaEntrada()}"></td>
+              <td th:text="${prod.usuarios.nombre}"></td>
+              <td th:text="${prod.unidades}"></td>
+
+              <td th:text="${prod.precio}"></td>
+              <td>
+                <a th:href="@{/productos/edit/{id} (id=${prod.getId()})}" class="btn btn-success btn-sm" role="button" title="Editar el registro."><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                <a th:href="@{/productos/delete/{id} (id=${prod.getId()})}"  onclick="myFunction()" class="btn btn-danger btn-sm" role="button" title="Eliminar el registro."><i class="fas fa-trash" aria-hidden="true"></i></a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <nav th:if="${productos.totalPages > 0}" aria-label="Page navigation example" >
+            <ul class="pagination p-2">
+              <li class="page-item"><a th:href="@{/productos/indexPaginate(page=${productos.number -1})}" class="page-link btn-primary">Anterior</a></li>
+              <li class="page-item"><a th:href="@{/productos/indexPaginate(page=${productos.number + 1})}" class="page-link btn-primary">Siguiente</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div> <!-- /container -->
+  </div>
+</main>
+
+<footer th:insert="fragments/footer :: pie-pagina" class="footer"></footer>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+
+  function myFunction() {
+    var txt;
+    if (confirm("Quiere eliminar el producto actual?")) {
+      txt = "Eliminado";
+      confirm(txt);
+    } else {
+      event.preventDefault()
+      // If you click cancel, remove the alert box
+    }
+
+    console.log(txt);
+  }
+
+  function limpiarFiltro(){
+    window.location = '/productos/indexPaginate';
+  }
+</script>
+</body>
+</html>

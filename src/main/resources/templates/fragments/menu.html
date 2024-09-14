@@ -1,0 +1,50 @@
+<nav th:fragment="menu-principal" class="navbar navbar-expand-md fixed-top bg-white"
+     xmlns:sec="http://www.w3.org/1999/xhtml">
+
+
+
+  <a class="navbar-brand" th:href="@{/}">
+    <img class="rounded mx-auto d-block" th:src="@{/images/logo_final.jpg}" alt="Logo" width="140" height="50">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" sec:authorize="hasAnyAuthority('ADMINISTRADOR','EMPLEADO','GERENTE')">
+        <a class="nav-link" th:href="@{/productos/indexPaginate}">Productos</a>
+      </li>
+      <li class="nav-item" sec:authorize="hasAnyAuthority('ADMINISTRADOR','EMPLEADO','GERENTE')">
+        <a class="nav-link" th:href="@{/pedidos/index}">Caja</a>
+      </li>
+
+      <li class="nav-item" sec:authorize="hasAnyAuthority('ADMINISTRADOR','EMPLEADO','GERENTE')">
+        <a class="nav-link" th:href="@{/ventas/index}">Pedidos</a>
+      </li>
+
+      <li class="nav-item" sec:authorize="hasAnyAuthority('ADMINISTRADOR','EMPLEADO','GERENTE')">
+        <a class="nav-link" th:href="@{/clientes/index}">Clientes</a>
+      </li>
+
+      <li class="nav-item" sec:authorize="hasAnyAuthority('ADMINISTRADOR','GERENTE')">
+        <a class="nav-link" th:href="@{/usuarios/index}">Usuarios</a>
+      </li>
+
+     <!-- <li class="nav-item" sec:authorize="!isAuthenticated()">
+        <a class="nav-link" th:href="@{/about}">Acerca de</a>
+      </li>
+      <li class="nav-item" sec:authorize="!isAuthenticated()">
+        <a class="nav-link" th:href="@{/contact}">Contacto</a>
+      </li>-->
+    </ul>
+    <div sec:authorize="hasAnyAuthority('ADMINISTRADOR')">
+      <a class="btn btn-warning" th:href="@{/signup}">Registrar</a>&nbsp;&nbsp;
+    </div>
+    <div sec:authorize="isAuthenticated()">
+      <span class="text-dark">Bienvenid@</span>&nbsp;
+      <span class="text-success" sec:authentication="name"></span>&nbsp;&nbsp;
+      <a class="btn btn-primary" th:href="@{/logout}">Cerrar sesión</a>&nbsp;
+    </div>
+  </div>
+</nav>

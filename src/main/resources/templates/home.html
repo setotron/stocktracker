@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <title>StockTracker</title>
+     <link rel="shortcut icon" type="image/ico" href="static/icono.ico" >
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link th:href="@{/bootstrap/css/jumbotron.css}" rel="stylesheet">
+    <link th:href="@{/bootstrap/css/sticky-footer-navbar.css}" rel="stylesheet">
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+
+     <style>
+         .fondo-bg{
+             background-image: url(/images/fondo-bg.png);
+             font-family: 'Lato';
+         }
+     </style>
+  </head>
+
+  <body class="fondo-bg">
+	<header th:insert="fragments/menu :: menu-principal"></header>
+
+    <main role="main" class="py-5">
+
+      <!-- Main jumbotron for a primary marketing message or call to action
+        <hr>
+        <img class="rounded mx-auto d-block"  th:src="@{/images/inventario.png}" alt="Generic placeholder image" width="600" height="600">
+
+        <hr>
+
+       /container -->
+        <header class="py-5 pt-4 text-dark">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 order-md-2">
+                        <img th:src="@{/images/InvenTracker.png}" alt="Imagen de encabezado" class="img-fluid">
+                    </div>
+                    <div class="col-md-6 order-md-1">
+                        <h1>Bienvenido a StockTracker</h1>
+                        <p class="lead">El mayor portal en gestión de Inventarios.<br> Controla tu inventario sin esfuerzo y de manera eficiente con StockTracker. Configura fácilmente tus productos y realiza un seguimiento de las cantidades disponibles. Ahorra tiempo y dinero al optimizar tu proceso de gestión de inventario. Descubre cómo nuestra aplicación puede ayudarte a mejorar la forma en que manejas tus existencias y a maximizar tus beneficios. ¡Pruébala ahora!</p>
+                        <!--<a href="#" class="btn btn-primary btn-lg">Ver más</a>-->
+                    </div>
+                </div>
+            </div>
+        </header>
+
+    </main>
+
+    <footer th:insert="fragments/footer :: pie-pagina" class="footer"></footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+  </body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>StockTracker</title>
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link th:href="@{/bootstrap/css/jumbotron.css}" rel="stylesheet">
+    <link th:href="@{/bootstrap/css/sticky-footer-navbar.css}" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+
+    <style>
+        .fondo-bg{
+            background-image: url(/images/fondo-bg.png);
+            font-family: 'Lato';
+        }
+
+        .table-container {
+            height: 350px;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body class="fondo-bg m-3">
+<header th:insert="fragments/menu :: menu-principal"></header>
+
+<main role="main" class="py-5">
+    <div class="container col-12">
+        <div class="card bg-secondary text-light">
+            <h4 class="card-header"><strong>Caja</strong></h4>
+            <div class="card-body">
+                <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+                     th:text="${mensaje}"
+                     class="alert">
+                </div>
+                <div class="row">
+                    <form class="form-group" style="margin-right: auto; padding-left: 15px;" th:object="${productos}" th:action="@{/pedidos/agregar}" method="post">
+
+                        <label for="Unidades">Unidades</label>
+                        <input type="text" class="form-control w-auto" name="Unidades" id="Unidades" placeholder="Unidades" required="required">
+                        <hr>
+                        <label for="codigo">Código de barras</label>
+                        <input autofocus autocomplete="off" th:field="*{codigo}" id="codigo"
+                               placeholder="Escanea el código o escríbelo y presiona Enter"
+                               type="text"
+                               class="form-control" style="width: 400px" th:classappend="${#fields.hasErrors('codigo')} ? 'is-invalid' : ''">
+                        <hr>
+                        <button type="submit" class="btn btn-warning">Agregar&nbsp;<i class="fa fa-plus-circle"></i>
+                        </button>
+                        <div class="invalid-feedback" th:errors="*{codigo}"></div>
+                        <!--<div class="form-group">
+                            <div class="form-inline">
+                                <select class="form-control" th:field="*{codigo}" th:each="prod : ${productos}" name="code" id="code">
+                                    <option th:value="'Código ' + ${prod.codigo} + '- Producto ' + ${prod.nombre}"
+                                            th:text="'Código ' + ${prod.codigo} + '- Producto ' + ${prod.nombre}"></option>
+                                </select>
+                            </div>
+                        </div>-->
+                    </form>
+                    <form class="mb-2 form-group" style="padding: 15px;" th:action="@{/pedidos/terminar}" method="post">
+                        <label for="Cliente">Cliente</label>
+                        <input type="text" class="form-control w-auto" name="NumRefClient" id="cliente" placeholder="Número de Cliente" >
+                        <hr>
+                        <button type="submit" class="btn btn-success">Terminar&nbsp;<i class="fa fa-check"></i>
+                        </button>
+                        <a th:href="@{/pedidos/limpiar}" class="btn btn-danger">Cancelar venta&nbsp;<i
+                                class="fa fa-trash"></i>
+                        </a>
+                        <hr>
+                        <h1 class="text-right" th:text="${'Total: ' + total}"></h1>
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="table-container col-md-6">
+                        <form style="padding: 15px;" class="form-inline" th:action="@{/pedidos/index}">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label>Filtrar: </label>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <input type="text" class="form-control" name="filtroProd" style="width:230px"id="filtroProd" th:value="${filtroProd}" placeholder="Busca por Nombre o Código" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="submit" class="btn btn-primary" value="Buscar">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="button" class="btn btn-danger" value="Limpiar" onclick="limpiarFiltroProd()">
+                                </div>
+                            </div>
+                        </form>
+                        <h5>Productos</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-dark table-hover table-striped">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Nombre de Producto</th>
+                                    <th scope="col">Unidades</th>
+                                    <th scope="col">Código</th>
+                                </tr>
+                                </thead>
+                                <tbody class="bg-dark text-light">
+                                <tr th:each="producto : ${prod}">
+                                    <td th:text="${producto.id}"></td>
+                                    <td th:text="${producto.nombre}"></td>
+                                    <td th:text="${producto.unidades}"></td>
+                                    <td th:text="${producto.codigo}"></td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="table-container col-md-6">
+                        <form style="padding: 15px;" class="form-inline" th:action="@{/pedidos/index}">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label>Filtrar: </label>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <input type="text" class="form-control" style="width:230px" name="filtroCli" id="filtroCli" th:value="${filtroCli}" placeholder="Busca por Empresa o Código" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="submit" class="btn btn-primary" value="Buscar">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="button" class="btn btn-danger" value="Limpiar" onclick="limpiarFiltroCli()">
+                                </div>
+                            </div>
+                        </form>
+                        <h5>Clientes</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-dark table-hover table-striped">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Empresa</th>
+                                    <th scope="col">Nº de Referencia</th>
+                                </tr>
+                                </thead>
+                                <tbody class="bg-dark text-light">
+                                <tr th:each="cliente : ${cli}">
+                                    <td th:text="${cliente.id}"></td>
+                                    <td th:text="${cliente.nombre}"></td>
+                                    <td th:text="${cliente.empresa}"></td>
+                                    <td th:text="${cliente.numRefr}"></td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="mt-2 table-responsive text-light">
+            <table class="table table-bordered table-dark table-hover table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Código</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                    <th>Quitar de lista</th>
+                </tr>
+                </thead>
+                <tbody class="bg-dark text-light">
+                <tr th:each="producto, iterador : ${session.carrito}">
+                    <td th:text="${producto.nombre}"></td>
+                    <td th:text="${producto.codigo}"></td>
+                    <td th:text="${producto.precio}"></td>
+                    <td th:text="${producto.cantidad}"></td>
+                    <td th:text="${producto.total}"></td>
+                    <td style="display: flex; margin: auto">
+                       <!-- <a style="margin: 5px;" th:href="@{/pedidos/sumar/{code}/{index} (code=${producto.getCodigo()},index=${iterador.index})}" class="btn btn-warning " role="button" title="Sumar">
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i></a>
+                        <a style="margin: 5px;" th:href="@{/pedidos/restar/{code} (code=${producto.getCodigo()})}" class="btn btn-warning " role="button" title="Sumar">
+                            <i class="fa fa-minus-circle" aria-hidden="true"></i></a>-->
+                        <form style="margin: 5px;" th:action="@{/pedidos/quitar/} + ${iterador.index}" method="post">
+                            <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+    function limpiarFiltroProd(){
+        window.location = '/pedidos/index';
+    }
+
+    function limpiarFiltroCli(){
+        window.location = '/pedidos/index';
+    }
+</script>
+</body>
+</html>
