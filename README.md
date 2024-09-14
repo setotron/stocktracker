@@ -15,7 +15,7 @@ The application has several functions:
 * A SQL compatible database
 * A browser such as Chrome or Edge
   
-It is important to modify the POM to match your database connection.
+It is important to modify the "application.properties" to match your database connection.
 
 ```java
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
