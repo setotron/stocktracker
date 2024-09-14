@@ -8,3 +8,18 @@ The application has several functions:
 * Add, modify and delete products
 * Product and customer search
 * Sending products to customer
+
+
+## How to use it
+* You will need to install Eclipse or InteliJ or another IDE compatible with Java and Springboot.
+* A SQL compatible database
+* A browser such as Chrome or Edge
+  
+It is important to modify the POM to match your database connection.
+
+```java
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/tfg_inventario
+spring.datasource.username=root
+spring.datasource.password=1234
+```
