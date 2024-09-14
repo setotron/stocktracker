@@ -23,3 +23,4 @@ spring.datasource.url=jdbc:mysql://localhost:3306/tfg_inventario
 spring.datasource.username=root
 spring.datasource.password=1234
 ```
+
